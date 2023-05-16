@@ -1,0 +1,169 @@
+.item{
+  background-color: #DBB94B;
+    font-size: 24px;
+    border: 1px solid #fff;
+    text-align: center;
+    padding: 10px;
+    position: relative;
+}
+
+.item .minus, .item .plus{
+    position: absolute;
+    bottom: 50%;
+    font-size: 36px;
+    line-height: 36px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    background-color: #DC3545 ;
+    cursor: pointer;
+}
+
+.item .amount{
+    font-size: 48px;
+    font-weight: bold;
+
+}
+
+
+.item .minus{
+    left: 15px;
+}
+
+.item .plus{
+    right: 15px;
+
+}
+
+/*
+#water{
+    background-color: aqua;
+
+}
+
+.freeSpot{
+    background-color: white;
+}
+*/
+
+#ordersTab #addOrderButton{
+    position: relative;
+   background-color: green;
+   font-size: xx-large;
+} 
+
+#kassaTab #emptyPrices{
+    position: relative;
+   background-color: red;
+   font-size: xx-large;
+}
+
+.toast{
+    position: fixed;
+    
+    bottom: 5px;
+    
+    left: calc(50% - 150px);
+    width: 300px;
+    background-color: green;
+}
+
+.toast .toast-header {
+    background-color: green;
+    color: #fff;
+    font-size: 20px;
+}
+.toast img{
+    margin-right: 5px;
+}
+
+#silkBeer {
+    background-color: #ffd966;
+}
+
+#beer {
+    background-color: #ffd966;
+}
+#radlerSmall {
+    background-color: #ffd966;
+}
+
+#radlerBig {
+    background-color: #ffd966;
+}
+
+#almdudler {
+    background-color: #b4c6e7;
+}
+#almdudlerBig {
+    background-color: #b4c6e7;
+}#almdudlerSmallInjected {
+    background-color: #b4c6e7;
+}#almdudlerBigInjected {
+    background-color: #b4c6e7;
+}
+#cola {
+    background-color: #b4c6e7;
+}
+#colaBig {
+    background-color: #b4c6e7;
+}
+#waterSmall {
+    background-color: #b4c6e7;
+}
+#waterBig {
+    background-color: #b4c6e7;
+}
+#oneBottleMineralWater {
+    background-color: #b4c6e7;
+}
+#oneQuarterMineral {
+    background-color: #b4c6e7;
+}
+#himbeerG {
+    background-color: #b4c6e7;
+}
+#himbeerK {
+    background-color: #b4c6e7;
+}
+
+#almdudlerWhiteSmall {
+    background-color: #f8cbad;
+}#almdudlerWhiteBig {
+    background-color: #f8cbad;
+}#colaWhiteSmall {
+    background-color: #f8cbad;
+}#colaWhiteBig {
+    background-color: #f8cbad;
+}#dreierl {
+    background-color: #f8cbad;
+}#dreierlBig {
+    background-color: #f8cbad;
+}#injectedWhiteSmall {
+    background-color: #f8cbad;
+}#injectedWhiteBig {
+    background-color: #f8cbad;
+}
+#dopplerSpritzer {
+    background-color: #a9d08e;
+}#dopplerLimoWine {
+    background-color: #a9d08e;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f8cbad;
+}
+.table-striped tbody tr:first-of-type {
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+.greenRow td{
+    background-color: green;
+}
+
+.redRow td{
+    background-color: red;
+}
+.blueRow td{
+    background-color: blue;
+}

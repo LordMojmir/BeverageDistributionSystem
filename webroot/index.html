@@ -1,0 +1,603 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Feuerwehr App</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+		integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+	<link rel="stylesheet" href="css/styles.css">
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+		integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+		crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+		integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+		crossorigin="anonymous"></script>
+	<script type="text/javascript" src="javascripts/dynamicPageLibrary.js" charset="UTF-8"></script>
+	<script src="/socket.io/socket.io.js" charset="UTF-8"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+	<script>
+		var chatInhalt = [];
+		var bus = new common.infrastructure.bus.Bus();
+		var jwtObject;
+
+		var deleteAddress = function deleteAddress(street, number) {
+			bus.sendCommand(webapp.shared.topics.REMOVE_ADDRESS_FROM_NOT_AT_HOME_LIST, { street: street, number: number });
+		};
+
+		var deleteOrder = function deleteOrder(table, order, countOfOrder) {
+			console.log('Delet Order works: ', { table: table, order: order, countOfOrder: countOfOrder });
+			bus.sendCommand(webapp.shared.topics.REMOVE_ORDER_FROM_ORDERS_LIST, { table: table, orders: order, countOfOrder: countOfOrder });
+		};
+		var makeItTeamsRed = function makeItTeamsRed(table, order, countOfOrder) {
+			
+			console.log(event);
+			if($(event.srcElement).parents('tr').hasClass('greenRow') || $(event.srcElement).parents('tr').hasClass('redRow') || $(event.srcElement).parents('tr').hasClass('blueRow')  ){
+				$(event.srcElement).parents('tr').removeClass('redRow') 
+			}else{
+				$(event.srcElement).parents('tr').addClass('redRow') 
+			} 
+		};
+
+		var makeItTeamsGreen = function makeItTeamsGreen(table, order, countOfOrder) {
+			
+			console.log(event);
+			if($(event.srcElement).parents('tr').hasClass('greenRow') || $(event.srcElement).parents('tr').hasClass('redRow') || $(event.srcElement).parents('tr').hasClass('blueRow')  ) {
+				$(event.srcElement).parents('tr').removeClass('greenRow') 
+			}else{
+				$(event.srcElement).parents('tr').addClass('greenRow') 
+			} 
+		};
+		var makeItTeamsBlue = function makeItTeamsBlue(table, order, countOfOrder) {
+			
+			console.log(event);
+			if($(event.srcElement).parents('tr').hasClass('greenRow') || $(event.srcElement).parents('tr').hasClass('redRow') || $(event.srcElement).parents('tr').hasClass('blueRow')  ){
+				$(event.srcElement).parents('tr').removeClass('blueRow') 
+			}else{
+				$(event.srcElement).parents('tr').addClass('blueRow') 
+			} 
+		};
+
+		var showTab = function showTab(event) {
+			var idOfTabToShow = event.target.id + 'Tab';
+			var tabs = $('body > div');
+
+			for (var i = 0; i < tabs.length; i++) {
+				var tab = tabs[i];
+				if (tab.id === idOfTabToShow) {
+					$(tab).removeClass('d-none');
+				} else {
+					if (tab.id !== 'footer') {
+						$(tab).addClass('d-none');
+					}
+				}
+
+			}
+
+			$('.collapse').collapse('hide');
+		};
+
+		$(document).ready(function () {
+
+			$('.toast').toast({ delay: 10000 });
+
+			let price = 0;
+
+			
+
+
+
+			const orderOptions = ["Schnitzel_Salat", "Schnitzelsemmel", "Pommes", "Kottlet_Pommes", "GemuseLeibchen_Salat", "Grillwurstchen_Pommes", "Semmel", "Salat"]
+			let orderOptionsCounter = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+			const prices = [10, 4, 3.00, 10.50, 7, 6.50, 0.5, 2]
+
+			const drinksOptions = ["beer", "silkBeer", "radlerSmall", "radlerBig", "almdudler", "almdudlerBig", "almdudlerSmallInjected", "almdudlerBigInjected", "cola", "colaBig", "waterSmall",  "waterBig", "himbeerG","himbeerK","oneQuarterMineral", "oneBottleMineralWater", "almdudlerWhiteSmall", "almdudlerWhiteBig", "colaWhiteSmall", "colaWhiteBig", "dreierl", "dreierlBig", "injectedWhiteSmall", "injectedWhiteBig", "dopplerSpritzer", "dopplerLimoWine"]
+			const drinksOptionsName = ["Krügel Bier", "Viertel Bier", "Krügel Radler", "Viertel Radler", "Almdudler Klein", "Almdudler Groß", "Almdudler gesp Klein", "Almdudler gesp Groß", "Cola Klein", "Cola Groß", "Leitungswasser Klein", "Leitungswasser Groß","Himbeeren S. Groß","Himbeeren S. Klein", "1/4 Mineral", "1 Flasche Mineral", "Almdudler Weiß Klein", "Almdudler Weiß Groß", "Cola Weiß Klein", "Cola Weiß Groß", "Dreierl Klein", "Dreierl Groß", "Spritzer Weiß Klein", "Spritzer Weiß Groß", "Doppler Spritzer", "Doppler Limo Wein"]
+			let orderOptionsCounterBar = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+			const pricesBar = [3.80,2.00,3.80,2.00,1.0,2,1,2,1,2,0,0,2,1,1,4,2.3,4.6,2.3,4.6,2.3,4.6,2,4,15,17]
+
+
+
+
+
+			kassaSquare()
+			barSquare()
+
+			function applyFilterValue() {
+				var filterValue = $('#filterValue').val().toLowerCase();
+				var streets = $('#notAtHomeTable td:nth-child(1)');
+				for (var i = 0; i < streets.length; i++) {
+					var street = streets[i];
+					var currentStreet = street.innerText;
+					if (currentStreet.toLowerCase().indexOf(filterValue) === 0) {
+						$(street).parent().removeClass('d-none');
+					} else {
+						$(street).parent().addClass('d-none');
+					}
+				}
+			};
+
+			var addAddressToNotAtHomeList = function addAddressToNotAtHomeList() {
+				console.log({ street: $('#street').val(), number: $('#number').val() });
+				bus.sendCommand(webapp.shared.topics.ADD_ADDRESS_TO_NOT_AT_HOME_LIST, { street: $('#street').val(), number: $('#number').val() });
+			};
+
+			
+			var addOrderToOrdersListBar = function addOrderToOrdersListBar() {
+
+				let order = '';
+
+				for (let i = 0; i < drinksOptions.length; i++) {
+					if (orderOptionsCounterBar[i] > 0) {
+
+						order += `${drinksOptionsName[i]}: ${orderOptionsCounterBar[i]}x<br/>`
+					}
+
+
+				}
+
+
+				if ($('#notes').val() == '') {
+					console.log('Notes are empty');
+				} else {
+					let notes = $('#notes').val().replace(/\n/g, ' ');
+					order += 'Anmerkungen: ' + $('#notes').val() + '<br/>';
+					order += 'Preis: ' + price + '<br/>'
+				}
+
+				bus.sendCommand(webapp.shared.topics.ADD_ORDER_TO_ORDERS_LIST, { table: $('#tableNumBar').val(), orders: order, countOfOrder: $('#name').val() });
+
+				//	let toastLiveExample = document.getElementById('.toast');
+				$('.toast').toast('show');
+
+				console.log("Test of addOrderToOrdersListBar");
+
+			}
+
+			function kassaSquare() {
+				var htmlCode = ''
+				for (const [index, orderOption] of orderOptions.entries()) {
+					htmlCode += `
+					<div class="item  col-6" id="${orderOption.split('').filter(e => e.trim().length).join('')}">
+				<div class="amount">
+					0
+				</div>
+				<div class="type">
+					${orderOption}
+				</div>
+				<div class="minus">
+					-
+				</div>
+				<div class="plus">
+					+
+				</div>
+			</div>
+					`
+				}
+				$('#kassaTab .row').html(htmlCode);
+
+			}
+
+			function barSquare() {
+
+				var htmlCode = ''
+				for (const [index, orderOption] of drinksOptions.entries()) {
+					htmlCode += `
+					<div class="item  col-6" id="${orderOption}">
+				<div class="amount">
+					0
+				</div>
+				<div class="type">
+					${drinksOptionsName[index]}
+				</div>
+				<div class="minus">
+					-
+				</div>
+				<div class="plus">
+					+
+				</div>
+			</div>
+					`
+				}
+				$('#ordersWithForTab .row').html(htmlCode);
+
+				console.log(" barSquare reached");
+			}
+
+
+			var onActuallyNotAtHome = function onActuallyNotAtHome(notAtHomeList) {
+				var htmlCode = '<table class="table table-striped">';
+				htmlCode += '<tbody>';
+				htmlCode += '<tr>';
+				htmlCode += '<th>Straße</th>';
+				htmlCode += '<th>Nr.</th>';
+				htmlCode += '<th></th>';
+				htmlCode += '</tr>';
+
+				notAtHomeList.forEach(addr => {
+					addr.number.forEach(num => {
+						htmlCode += '<tr>';
+						htmlCode += '<td>' + addr.street + '</td>';
+						htmlCode += '<td>' + num + '</td>';
+						htmlCode += '<td><button onclick="deleteAddress(\'' + addr.street + '\', \'' + num + '\')">Löschen</button></td>';
+						htmlCode += '</tr>';
+					});
+				});
+
+				htmlCode += '</tbody>';
+				htmlCode += '</table>';
+				$('#notAtHomeTable').html(htmlCode);
+				applyFilterValue();
+			};
+
+			var onActualOrders = function onActualOrders(ordersList) {
+
+				var htmlCode = '<table class="table table-striped">';
+				htmlCode += '<tbody>';
+				htmlCode += '<tr>';
+				htmlCode += '<th>Tisch Nummer</th>';
+				htmlCode += '<th>Bestellung</th>';
+				htmlCode += '<th>Kellner</th>';
+				htmlCode += '<th></th>';
+				htmlCode += '</tr>';
+
+				ordersList.forEach(order => {
+
+					htmlCode += '<tr>';
+					htmlCode += "<td style='font-size: 200%'>"+ order.table + '</td>';
+					htmlCode += "<td style='font-size: 200%'>" + order.orders + '</td>';
+					htmlCode += "<td style='font-size: 125%'>" + order.countOfOrder + '</td>';
+					htmlCode += '<td><button onclick="deleteOrder(\'' + order.table + '\', \'' + order.orders + '\', \'' + order.countOfOrder + '\')">Löschen</button>';
+					htmlCode += '<button onclick="makeItTeamsRed(\'' + order.table + '\', \'' + order.orders + '\', \'' + order.countOfOrder + '\')">Rot</button><br/> <button onclick="makeItTeamsGreen(\'' + order.table + '\', \'' + order.orders + '\', \'' + order.countOfOrder + '\')">Grün</button><button onclick="makeItTeamsBlue(\'' + order.table + '\', \'' + order.orders + '\', \'' + order.countOfOrder + '\')">Blau</button>  </td>';
+					htmlCode += '</tr>';
+				});
+
+				htmlCode += '</tbody>';
+				htmlCode += '</table>';
+				$('#barTab').html(htmlCode);
+			};
+
+
+			var onChatMessage = function onChatMessage(data) {
+				var chatZeile = data.name + ': ' + data.message;
+				chatInhalt[chatInhalt.length] = chatZeile;
+				chatInhalt = chatInhalt.slice(-10);
+				$('#chatHistory').val(chatInhalt.join('\n'));
+			};
+
+			var sendChatMessage = function sendChatMessage() {
+				bus.sendCommand(webapp.shared.topics.CHAT_MESSAGE, { message: $('#chatMessage').val(), session: jwtObject.token });
+				$('#chatMessage').val('');
+			};
+
+			var addToOrderForKasse = function addToOrderForKasse(orderKind, amount) {
+
+
+				let currentPrice = 0;
+
+				currentPrice = prices[orderOptions.indexOf(orderKind)]
+
+				for (let i = 0; i < orderOptions.length; i++) {
+					if (orderKind == orderOptions[i]) {
+						if (orderOptionsCounter[i] + amount >= 0) {
+							orderOptionsCounter[i] += amount;
+							$(`#${orderKind.split('').filter(e => e.trim().length).join('')} .amount`).html(orderOptionsCounter[i]);
+							price += amount * currentPrice;
+
+						}
+					}
+				}
+				console.log(orderKind, amount, currentPrice, price)
+
+				price *= 100;
+				price = Math.round(price)
+				price /= 100;
+
+				$('#kassaTab #price').val(price);
+
+			}
+
+			var addToOrderForBar = function addToOrderForBar(orderKind, amount) {
+
+
+				let currentPrice = 0;
+
+				currentPrice = pricesBar[drinksOptions.indexOf(orderKind)]
+
+				for (let i = 0; i < drinksOptions.length; i++) {
+					if (orderKind == drinksOptions[i]) {
+						if (orderOptionsCounterBar[i] + amount >= 0) {
+							orderOptionsCounterBar[i] += amount;
+							$(`#${orderKind.split('').filter(e => e.trim().length).join('')} .amount`).html(orderOptionsCounterBar[i]);
+							price += amount * currentPrice;
+
+						}
+					}
+				}
+				console.log(orderKind, amount, currentPrice, price)
+
+				price *= 100;
+				price = Math.round(price)
+				price /= 100;
+
+				$('#ordersWithForTab #price').val(price);
+
+			}
+
+
+
+			var emptyPrices = function emptyPrices() {
+
+				for (let i = 0; i < orderOptions.length; i++) {
+					orderOptionsCounter[i] = 0;
+					$(`#${orderOptions[i]} .amount`).html(orderOptionsCounter[i]);
+				}
+				price = 0;
+				console.log("EmptyPrices reached");
+				$('#kassaTab #price').val(price);
+			}
+
+			//Test 
+			// $('#orderOtionOne .plus').click(() => addToOrderForKasse('orderOtionOne', 1));
+			// $('#orderOtionOne .minus').click(() => addToOrderForKasse('orderOtionOne', -1));
+
+			$('#emptyPrices').click(() => emptyPrices());
+
+			for (const orderOption of orderOptions) {
+				$(`#${orderOption.split('').filter(e => e.trim().length).join('')} .plus`).click(() => addToOrderForKasse(orderOption, 1));
+				$(`#${orderOption.split('').filter(e => e.trim().length).join('')} .minus`).click(() => addToOrderForKasse(orderOption, -1));
+
+			}
+
+			for (const drinksOption of drinksOptions) {
+				$(`#${drinksOption.split('').filter(e => e.trim().length).join('')} .plus`).click(() => addToOrderForBar(drinksOption, 1));
+				$(`#${drinksOption.split('').filter(e => e.trim().length).join('')} .minus`).click(() => addToOrderForBar(drinksOption, -1));
+
+			}
+
+			$('#addAddressButton').click(addAddressToNotAtHomeList);
+			//$('#addOrderButton').click(addOrderToOrdersList);
+			$('#addOrderButtonBar').click(addOrderToOrdersListBar);
+
+			$('#number').keypress(function (e) {
+				var key = e.which;
+				if (key == 13)  // the enter key code
+				{
+					addAddressToNotAtHomeList();
+					return false;
+				}
+			});
+			$("#filterValue").keyup(applyFilterValue);
+			$('#navbarTogglerDemo01 a').click(showTab);
+			$('#sendChatMessage').click(sendChatMessage);
+			$('#chatMessage').keypress(function (e) {
+				var key = e.which;
+				if (key == 13)  // the enter key code
+				{
+					sendChatMessage();
+					return false;
+				}
+			});
+
+			bus.subscribeToPublication(webapp.shared.topics.ACTUALLYNOTATHOME, onActuallyNotAtHome);
+			bus.subscribeToPublication(webapp.shared.topics.ACTUALORDER, onActualOrders);
+			bus.subscribeToCommand(webapp.shared.topics.CHAT_BROADCAST, onChatMessage);
+			var topicsToTransmit = [
+				webapp.shared.topics.ADD_ADDRESS_TO_NOT_AT_HOME_LIST,
+				webapp.shared.topics.REMOVE_ADDRESS_FROM_NOT_AT_HOME_LIST,
+				webapp.shared.topics.ADD_ORDER_TO_ORDERS_LIST,
+				webapp.shared.topics.REMOVE_ORDER_FROM_ORDERS_LIST,
+				webapp.shared.topics.CHAT_MESSAGE
+			];
+			var busBridge = new common.infrastructure.busbridge.ClientSocketIoBusBridge(bus, topicsToTransmit, io);
+
+			var cookies = document.cookie
+				.split('; ')
+				.map(function (cookie) { return cookie.split('='); })
+				.reduce(function (obj, cookie) {
+					obj[cookie[0]] = cookie[1];
+					return obj;
+				}, {});
+			var token = cookies.session;
+
+			jwtObject = JSON.parse(atob(token.split('.')[1]));
+			jwtObject.token = token;
+
+			$('#ordersTab #name').val(jwtObject.name);
+			$('#ordersWithForTab #name').val(jwtObject.name);
+			$('#chatTab #name').val(jwtObject.name);
+
+		});
+	</script>
+</head>
+
+<body>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-danger">
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01"
+			aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<a class="navbar-brand" href="#">FeuerwehrApp</a>
+
+		<div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+			<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+				<li class="nav-item">
+					<a class="nav-link" id="notAtHome">notAtHome</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="chat">chat</a>
+				</li>
+				
+
+				<li class="nav-item">
+					<a class="nav-link" id="ordersWithFor">Bestellungen</a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link" id="bar">Bar</a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link" id="kassa">Kassa</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+
+	<div id="notAtHomeTab" class="d-none p-2">
+		<table class="table table-sm">
+			<tbody>
+				<tr>
+					<td>Straße</td>
+					<td><input id="street" value="" type="text"></td>
+				</tr>
+				<tr>
+					<td>Nr:</td>
+					<td><input id="number" value="" type="text"></td>
+				</tr>
+				<tr>
+					<td colspan="2" class="text-center"><button id="addAddressButton">Senden</button></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<p>
+			<input id="filterValue" value="" type="text" placeholder="Suchen (z.B. &quot;Garten&quot;) ...">
+		</p>
+
+		<div id="notAtHomeTable"></div>
+	</div>
+
+
+
+
+	
+
+
+	<div id="ordersWithForTab" class="p-2">
+		<table class="table table-sm">
+
+			<tbody>
+				<tr>
+					<td>Name:</td>
+					<td><input id="name" value="" type="text" readonly size=25%></td>
+				</tr>
+
+				<td>Tisch Nummer</td>
+				<td><input id="tableNumBar" value="" type="text" size=25%></td>
+				</tr>
+				
+				<tr>
+					<td>Preis:</td>
+					<td><input id="price" value="" type="text" readonly size=25%></td>
+				</tr>
+				
+			</tbody>
+		</table>
+		
+		<div id="items" class="container-fluid">
+			<div class="row">
+				
+			</div>
+			
+			<table class="table table-sm">
+				
+				<tbody>
+					
+					<tr>
+						<td>Preis:</td>
+						<td><input id="price" value="" type="text" readonly size=25%></td>
+					</tr>
+					<tr>
+						<td>Anmerkungen</td>
+						<td><textarea rows="5" id="notes" maxlength="175" type="text" style="width:25%;"></textarea></td>
+					  </tr>
+					<tr>
+						<td colspan="2" class="text-center"><button type="button"
+								class="btn  btn-block btn-lg btn-primary btn-danger" id="addOrderButtonBar">Bestellung
+								aufgeben</button></td>
+					</tr>
+
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div id="barTab" class="d-none p-2">
+		<table class="barTab table-sm" id="barTabID">
+			<p>
+				<input id="filterValue" value="" type="text" placeholder="Suchen (z.B. &quot;Garten&quot;) ...">
+			</p>
+
+			<div id="orderTable"></div>
+		</table>
+
+
+
+	</div>
+
+	<div id="kassaTab" class="d-none p-2">
+		<tbody>
+
+			<tr>
+				<td>Preis:</td>
+				<td><input id="price" value="" type="text" readonly size=25%></td>
+			</tr>
+		</tbody>
+		<div class="row">
+				
+		</div>
+		<tr>
+			<td colspan="2" class="text-center"><button type="button"
+					class="btn  btn-block btn-lg btn-primary btn-danger" id="emptyPrices">Zurücksetzen</button></td>
+		</tr>
+	</div>
+
+
+	<div id="chatTab" class="d-none p-1">
+		<table class="table-borderless table-sm mx-auto m-4">
+			<tbody>
+				<tr>
+					<td>Name:</td>
+					<td><input id="name" value="" type="text" readonly></td>
+				</tr>
+				<tr>
+					<td>Nachricht:</td>
+					<td><input id="chatMessage" value="" type="text"></td>
+				</tr>
+				<tr>
+					<td colspan="2" class="text-center"><button id="sendChatMessage">Senden</button></td>
+				</tr>
+				<tr>
+					<td colspan="2"><textarea id="chatHistory" rows="6" readonly class="w-100"></textarea></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+
+	<div id="footer" class="card-footer text-muted bg-danger p-1">
+		<p class="text-center text-light m-0">supported by <a href="https://www.apple.com/" class="text-warning">Mojmír
+				H.</a></p>
+	</div>
+
+	<div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+		<div class="toast-header">
+			<img src="/img/Feuerwehr-Logo-450x564.png" width="20" class="rounded mr-2" alt="...">
+			<strong class="mr-auto">Bestellung abgeschickt</strong>
+			<!-- <small>11 mins ago</small> -->
+			<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<!-- <div class="toast-body">
+		  Hello, world! This is a toast message.
+		</div> -->
+	</div>
+</body>
+
+</html>

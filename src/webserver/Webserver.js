@@ -184,7 +184,7 @@ var Constructor = function Constructor() {
 	};
 
 	var addOrderToOrdersList = function addOrderToOrdersList(order){
-		// order = order.replace('\n', ' ');
+		// toDo: add the value of an Team, so it doesn't change with reload of webpage
 		order.orders = order.orders.replace(/\n/g, ' ');
 
 		console.log('addOrderToOrdersList: function' + JSON.stringify(order));	

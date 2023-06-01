@@ -33,34 +33,6 @@
 			console.log('Delet Order works: ', { table: table, order: order, countOfOrder: countOfOrder });
 			bus.sendCommand(webapp.shared.topics.REMOVE_ORDER_FROM_ORDERS_LIST, { table: table, orders: order, countOfOrder: countOfOrder });
 		};
-		var makeItTeamsRed = function makeItTeamsRed(table, order, countOfOrder) {
-			
-			console.log(event);
-			if($(event.srcElement).parents('tr').hasClass('greenRow') || $(event.srcElement).parents('tr').hasClass('redRow') || $(event.srcElement).parents('tr').hasClass('blueRow')  ){
-				$(event.srcElement).parents('tr').removeClass('redRow') 
-			}else{
-				$(event.srcElement).parents('tr').addClass('redRow') 
-			} 
-		};
-
-		var makeItTeamsGreen = function makeItTeamsGreen(table, order, countOfOrder) {
-			
-			console.log(event);
-			if($(event.srcElement).parents('tr').hasClass('greenRow') || $(event.srcElement).parents('tr').hasClass('redRow') || $(event.srcElement).parents('tr').hasClass('blueRow')  ) {
-				$(event.srcElement).parents('tr').removeClass('greenRow') 
-			}else{
-				$(event.srcElement).parents('tr').addClass('greenRow') 
-			} 
-		};
-		var makeItTeamsBlue = function makeItTeamsBlue(table, order, countOfOrder) {
-			
-			console.log(event);
-			if($(event.srcElement).parents('tr').hasClass('greenRow') || $(event.srcElement).parents('tr').hasClass('redRow') || $(event.srcElement).parents('tr').hasClass('blueRow')  ){
-				$(event.srcElement).parents('tr').removeClass('blueRow') 
-			}else{
-				$(event.srcElement).parents('tr').addClass('blueRow') 
-			} 
-		};
 
 		var showTab = function showTab(event) {
 			var idOfTabToShow = event.target.id + 'Tab';
@@ -87,7 +59,7 @@
 
 			let price = 0;
 
-			
+
 
 
 
@@ -95,10 +67,10 @@
 			let orderOptionsCounter = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 			const prices = [10, 4, 3.00, 10.50, 7, 6.50, 0.5, 2]
 
-			const drinksOptions = ["beer", "silkBeer", "radlerSmall", "radlerBig", "almdudler", "almdudlerBig", "almdudlerSmallInjected", "almdudlerBigInjected", "cola", "colaBig", "waterSmall",  "waterBig", "himbeerG","himbeerK","oneQuarterMineral", "oneBottleMineralWater", "almdudlerWhiteSmall", "almdudlerWhiteBig", "colaWhiteSmall", "colaWhiteBig", "dreierl", "dreierlBig", "injectedWhiteSmall", "injectedWhiteBig", "dopplerSpritzer", "dopplerLimoWine"]
-			const drinksOptionsName = ["Krügel Bier", "Viertel Bier", "Krügel Radler", "Viertel Radler", "Almdudler Klein", "Almdudler Groß", "Almdudler gesp Klein", "Almdudler gesp Groß", "Cola Klein", "Cola Groß", "Leitungswasser Klein", "Leitungswasser Groß","Himbeeren S. Groß","Himbeeren S. Klein", "1/4 Mineral", "1 Flasche Mineral", "Almdudler Weiß Klein", "Almdudler Weiß Groß", "Cola Weiß Klein", "Cola Weiß Groß", "Dreierl Klein", "Dreierl Groß", "Spritzer Weiß Klein", "Spritzer Weiß Groß", "Doppler Spritzer", "Doppler Limo Wein"]
+			const drinksOptions = ["beer", "silkBeer", "radlerSmall", "radlerBig", "almdudler", "almdudlerBig", "almdudlerSmallInjected", "almdudlerBigInjected", "cola", "colaBig", "waterSmall", "waterBig", "himbeerG", "himbeerK", "oneQuarterMineral", "oneBottleMineralWater", "almdudlerWhiteSmall", "almdudlerWhiteBig", "colaWhiteSmall", "colaWhiteBig", "dreierl", "dreierlBig", "injectedWhiteSmall", "injectedWhiteBig", "dopplerSpritzer", "dopplerLimoWine"]
+			const drinksOptionsName = ["Krügel Bier", "Viertel Bier", "Krügel Radler", "Viertel Radler", "Almdudler Klein", "Almdudler Groß", "Almdudler gesp Klein", "Almdudler gesp Groß", "Cola Klein", "Cola Groß", "Leitungswasser Klein", "Leitungswasser Groß", "Himbeeren S. Groß", "Himbeeren S. Klein", "1/4 Mineral", "1 Flasche Mineral", "Almdudler Weiß Klein", "Almdudler Weiß Groß", "Cola Weiß Klein", "Cola Weiß Groß", "Dreierl Klein", "Dreierl Groß", "Spritzer Weiß Klein", "Spritzer Weiß Groß", "Doppler Spritzer", "Doppler Limo Wein"]
 			let orderOptionsCounterBar = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-			const pricesBar = [3.80,2.00,3.80,2.00,1.0,2,1,2,1,2,0,0,2,1,1,4,2.3,4.6,2.3,4.6,2.3,4.6,2,4,15,17]
+			const pricesBar = [3.80, 2.00, 3.80, 2.00, 1.0, 2, 1, 2, 1, 2, 0, 0, 2, 1, 1, 4, 2.3, 4.6, 2.3, 4.6, 2.3, 4.6, 2, 4, 15, 17]
 
 
 
@@ -126,7 +98,7 @@
 				bus.sendCommand(webapp.shared.topics.ADD_ADDRESS_TO_NOT_AT_HOME_LIST, { street: $('#street').val(), number: $('#number').val() });
 			};
 
-			
+
 			var addOrderToOrdersListBar = function addOrderToOrdersListBar() {
 
 				let order = '';
@@ -149,13 +121,14 @@
 					order += 'Preis: ' + price + '<br/>'
 				}
 
-				bus.sendCommand(webapp.shared.topics.ADD_ORDER_TO_ORDERS_LIST, { table: $('#tableNumBar').val(), orders: order, countOfOrder: $('#name').val() });
 
+				let teamNumber = Math.random() * 3 + 1;
+				bus.sendCommand(webapp.shared.topics.ADD_ORDER_TO_ORDERS_LIST, { table: $('#tableNumBar').val(), orders: order, countOfOrder: $('#name').val(), toDo: Math.floor(teamNumber) });
+				if(teamNumber >= 3){
+					teamNumber = 0;
+				}
 				//	let toastLiveExample = document.getElementById('.toast');
 				$('.toast').toast('show');
-
-				console.log("Test of addOrderToOrdersListBar");
-
 			}
 
 			function kassaSquare() {
@@ -235,7 +208,6 @@
 			};
 
 			var onActualOrders = function onActualOrders(ordersList) {
-
 				var htmlCode = '<table class="table table-striped">';
 				htmlCode += '<tbody>';
 				htmlCode += '<tr>';
@@ -244,22 +216,55 @@
 				htmlCode += '<th>Kellner</th>';
 				htmlCode += '<th></th>';
 				htmlCode += '</tr>';
-
+				let i = 0;
 				ordersList.forEach(order => {
-
-					htmlCode += '<tr>';
-					htmlCode += "<td style='font-size: 200%'>"+ order.table + '</td>';
+					i++;
+					htmlCode += `<tr class="row-${order.toDo}" id="orderForTable${order.table}">`;
+					htmlCode += "<td style='font-size: 200%'>" + order.table + '</td>';
 					htmlCode += "<td style='font-size: 200%'>" + order.orders + '</td>';
 					htmlCode += "<td style='font-size: 125%'>" + order.countOfOrder + '</td>';
 					htmlCode += '<td><button onclick="deleteOrder(\'' + order.table + '\', \'' + order.orders + '\', \'' + order.countOfOrder + '\')">Löschen</button>';
-					htmlCode += '<button onclick="makeItTeamsRed(\'' + order.table + '\', \'' + order.orders + '\', \'' + order.countOfOrder + '\')">Rot</button><br/> <button onclick="makeItTeamsGreen(\'' + order.table + '\', \'' + order.orders + '\', \'' + order.countOfOrder + '\')">Grün</button><button onclick="makeItTeamsBlue(\'' + order.table + '\', \'' + order.orders + '\', \'' + order.countOfOrder + '\')">Blau</button>  </td>';
 					htmlCode += '</tr>';
+					if (i >= 3) {
+						i = 0;
+
+					}
+					
+					console.log(order.toDo);
 				});
 
 				htmlCode += '</tbody>';
 				htmlCode += '</table>';
 				$('#barTab').html(htmlCode);
+
+				var ones = document.getElementsByClassName('row-1');
+				for (var j = 0; j < ones.length; j++) {
+					ones[j].style.backgroundColor = '#b4c6e7';
+				}
+				var ones = document.getElementsByClassName('row-2');
+				for (var j = 0; j < ones.length; j++) {
+					ones[j].style.backgroundColor = '#ffd966';
+				}
+				var ones = document.getElementsByClassName('row-3');
+				for (var j = 0; j < ones.length; j++) {
+					ones[j].style.backgroundColor = '#a9d08e';
+				}
+
+
+				// // Assigning colors to rows
+				// var tableRows = document.getElementsByClassName('row');
+				// Array.from(tableRows).forEach((row, index) => {
+				// 	if (index % 3 === 0) {
+				// 		row.style.backgroundColor = '#b4c6e7';
+				// 	} else if (index % 3 === 1) {
+				// 		row.style.backgroundColor = '#ffd966';
+				// 	} else {
+				// 		row.style.backgroundColor = '#a9d08e';
+				// 	}
+				// });
 			};
+
+
 
 
 			var onChatMessage = function onChatMessage(data) {
@@ -431,7 +436,7 @@
 				<li class="nav-item">
 					<a class="nav-link" id="chat">chat</a>
 				</li>
-				
+
 
 				<li class="nav-item">
 					<a class="nav-link" id="ordersWithFor">Bestellungen</a>
@@ -475,7 +480,7 @@
 
 
 
-	
+
 
 
 	<div id="ordersWithForTab" class="p-2">
@@ -490,32 +495,33 @@
 				<td>Tisch Nummer</td>
 				<td><input id="tableNumBar" value="" type="text" size=25%></td>
 				</tr>
-				
+
 				<tr>
 					<td>Preis:</td>
 					<td><input id="price" value="" type="text" readonly size=25%></td>
 				</tr>
-				
+
 			</tbody>
 		</table>
-		
+
 		<div id="items" class="container-fluid">
 			<div class="row">
-				
+
 			</div>
-			
+
 			<table class="table table-sm">
-				
+
 				<tbody>
-					
+
 					<tr>
 						<td>Preis:</td>
 						<td><input id="price" value="" type="text" readonly size=25%></td>
 					</tr>
 					<tr>
 						<td>Anmerkungen</td>
-						<td><textarea rows="5" id="notes" maxlength="175" type="text" style="width:100%;"></textarea></td>
-					  </tr>
+						<td><textarea rows="5" id="notes" maxlength="175" type="text" style="width:100%;"></textarea>
+						</td>
+					</tr>
 					<tr>
 						<td colspan="2" class="text-center"><button type="button"
 								class="btn  btn-block btn-lg btn-primary btn-danger" id="addOrderButtonBar">Bestellung
@@ -549,7 +555,7 @@
 			</tr>
 		</tbody>
 		<div class="row">
-				
+
 		</div>
 		<tr>
 			<td colspan="2" class="text-center"><button type="button"

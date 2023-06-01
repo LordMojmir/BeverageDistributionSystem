@@ -124,7 +124,7 @@
 
 				let teamNumber = Math.random() * 3 + 1;
 				bus.sendCommand(webapp.shared.topics.ADD_ORDER_TO_ORDERS_LIST, { table: $('#tableNumBar').val(), orders: order, countOfOrder: $('#name').val(), toDo: Math.floor(teamNumber) });
-				if(teamNumber >= 3){
+				if (teamNumber >= 3) {
 					teamNumber = 0;
 				}
 				//	let toastLiveExample = document.getElementById('.toast');
@@ -219,17 +219,23 @@
 				let i = 0;
 				ordersList.forEach(order => {
 					i++;
-					htmlCode += `<tr class="row-${order.toDo}" id="orderForTable${order.table}">`;
+					htmlCode += `<tr class="row-${order.toDo}" style="margin-bottom: 50px;" id="orderForTable${order.table}">`;
 					htmlCode += "<td style='font-size: 200%'>" + order.table + '</td>';
 					htmlCode += "<td style='font-size: 200%'>" + order.orders + '</td>';
-					htmlCode += "<td style='font-size: 125%'>" + order.countOfOrder + '</td>';
+					if (window.innerWidth > 512) {
+						// Add the line of code
+						htmlCode += "<td style='font-size: 125%'>" + order.countOfOrder + '</td>';
+					}
+
+					// htmlCode += "<td style='font-size: 125%'>" + order.countOfOrder + '</td>';
 					htmlCode += '<td><button onclick="deleteOrder(\'' + order.table + '\', \'' + order.orders + '\', \'' + order.countOfOrder + '\')">Löschen</button>';
 					htmlCode += '</tr>';
+
 					if (i >= 3) {
 						i = 0;
 
 					}
-					
+
 					console.log(order.toDo);
 				});
 

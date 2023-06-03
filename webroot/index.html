@@ -126,10 +126,10 @@
 					// $('.toastNoTable').toast('show');
 
 				} else {
-					if (teamNumber >= 3) {
-						teamNumber = 0;
-					}
 					let teamNumber = Math.random() * 2;
+					// if (teamNumber >= 3) {
+					// 	teamNumber = 0;
+					// }
 					bus.sendCommand(webapp.shared.topics.ADD_ORDER_TO_ORDERS_LIST, { table: $('#tableNumBar').val(), orders: order, countOfOrder: $('#name').val(), toDo: Math.ceil(teamNumber) });
 
 					$('.toast').toast('show');

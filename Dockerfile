@@ -27,6 +27,7 @@ RUN npm --production install
 COPY --from=builder /usr/src/app/webroot/ ./webroot/
 COPY --from=builder /usr/src/app/src/ ./src/
 COPY --from=builder /usr/src/app/startWebserver.sh .
+RUN chmod a+x ./startWebserver.sh
 
 # Create folder for TingoDb database
 RUN mkdir /usr/src/app/database

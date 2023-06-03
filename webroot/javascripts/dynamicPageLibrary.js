@@ -462,3 +462,5 @@ webapp.shared.topics.REMOVE_ADDRESS_FROM_NOT_AT_HOME_LIST = '/shared/removeToNot
  * example data: {'tabelNum': '19','orders' : 'Schnitzel', 'countOfOrder': '2'}
  */
  webapp.shared.topics.REMOVE_ORDER_FROM_ORDERS_LIST = '/shared/removeToOrders';
+
+ webapp.shared.topics.MAKE_ORDER_TO_YOURS = '/shared/makeOrderYours';

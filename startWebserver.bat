@@ -10,7 +10,7 @@ if %ERRORLEVEL% GTR 0 (
 
 
 set "FEUERWEHR_APP_PASSWORD=FF-Weiden"
-set "FEUERWEHR_APP_USERNAMES=admin,Roman,Thomas,Mojmir,Guest,Marco,Stefan,Lea,Chrisoph,Vanesa,Elisa,Wachtler V,Bitter Ch,Steiner Th, Nolz S, Nolz B, Kerstin, Nolz H,Philip,Wachtler R, Krikler J, Schwarz M"
+set "FEUERWEHR_APP_USERNAMES=admin,Roman,Thomas,Mojmir,Guest,Marco,Stefan,Lea,Chrisoph,Vanessa,Elisa,Wachtler V,Bitter Ch,Steiner Th, Nolz S, Nolz B, Kerstin, Nolz H,Philip,Wachtler R, Krikler J, Schwarz M,Timo"
 
 
  

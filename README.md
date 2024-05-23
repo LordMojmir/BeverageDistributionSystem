@@ -52,3 +52,11 @@ Open a browser (e.g., Firefox) and enter the address `http://localhost:8080/`.
 ## Starting a Docker Container
 
 To start a Docker container, execute `docker run --rm -p8080:8080 dynamic-webpage`.
+
+## Azure Deployment
+
+1. Execute `az login  --use-device-code`
+
+2. Execute and replace the ... with you subscription token `az account set --subscription "..."`
+
+3. Execute `az acr build -t feuerwehr -r coderdojo.azurecr.io . `

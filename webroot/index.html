@@ -68,19 +68,42 @@
 			let orderOptionsCounter = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 			const prices = [10, 4, 3.00, 10.50, 7, 6.50, 0.5, 2]
 
-			const drinksOptions = [
-				"beer", "silkBeer", "radlerSmall", "radlerBig", "almdudler", "almdudlerBig",
-				"almdudlerSmallInjected", "almdudlerBigInjected", "cola", "colaBig",
-				"waterSmall", "waterBig", "himbeerG", "himbeerK", "oneQuarterMineral",
-				"oneBottleMineralWater", "almdudlerWhiteSmall", "almdudlerWhiteBig",
-				"colaWhiteSmall", "colaWhiteBig", "dreierl", "dreierlBig",
-				"injectedWhiteSmall", "injectedWhiteBig", "dopplerSpritzer", "dopplerLimoWine"
+			const drinks = [
+				{ name: "beer", price: 4.50 },
+				{ name: "silkBeer", price: 2.50 },
+				{ name: "radlerSmall", price: 2.50 },
+				{ name: "radlerBig", price: 4.50 },
+				{ name: "almdudler", price: 2.00 },
+				{ name: "almdudlerBig", price: 4.00 },
+				{ name: "almdudlerSmallInjected", price: 2.00 },
+				{ name: "almdudlerBigInjected", price: 4.00 },
+				{ name: "cola", price: 2.00 },
+				{ name: "colaBig", price: 4.00 },
+				{ name: "waterSmall", price: 0.00 },
+				{ name: "waterBig", price: 0.00 },
+				{ name: "himbeerG", price: 2.00 },
+				{ name: "himbeerK", price: 1.00 },
+				{ name: "oneQuarterMineral", price: 1.00 },
+				{ name: "oneBottleMineralWater", price: 5.00 },
+				{ name: "almdudlerWhiteSmall", price: 2.50 },
+				{ name: "almdudlerWhiteBig", price: 5.00 },
+				{ name: "colaWhiteSmall", price: 2.50 },
+				{ name: "colaWhiteBig", price: 5.00 },
+				{ name: "dreierl", price: 2.50 },
+				{ name: "dreierlBig", price: 5.00 },
+				{ name: "injectedWhiteSmall", price: 2.00 },
+				{ name: "injectedWhiteBig", price: 4.00 },
+				{ name: "dopplerSpritzer", price: 15.00 },
+				{ name: "dopplerLimoWine", price: 19.00 }
 			];
+
+			const drinksOptions = drinks.map(drink => drink.name);
+			const pricesBar = drinks.map(drink => drink.price);
+
 
 			const drinksOptionsName = ["Krügel Bier", "Viertel Bier", "Krügel Radler", "Viertel Radler", "Almdudler Klein", "Almdudler Groß", "Almdudler gesp Klein", "Almdudler gesp Groß", "Cola Klein", "Cola Groß", "Leitungswasser Klein", "Leitungswasser Groß", "Himbeeren L. Groß", "Himbeeren L. Klein", "1/4 Mineral", "1 Flasche Mineral", "Almdudler Weiß Klein", "Almdudler Weiß Groß", "Cola Weiß Klein", "Cola Weiß Groß", "Dreierl Klein", "Dreierl Groß", "Spritzer Weiß Klein", "Spritzer Weiß Groß", "Doppler Spritzer", "Doppler Limo Wein"]
 			let orderOptionsCounterBar = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-			const pricesBar = [4.50, 2.50, 2.50, 4.50, 2.00, 4.00, 2.00, 4.00, 2.00, 4.00, 0.00, 0.00, 1.00, 2.00, 1.00, 5.00, 2.50, 5.00, 2.50, 5.00, 2.50, 5.00, 2.00, 4.00, 15.00, 19.00];
 
 
 
